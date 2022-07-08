@@ -99,14 +99,15 @@ DOCKERREPO_FPR=9DC858229FC7DD38854AE2D88D81803C0EBFCD88
 DOCKERREPO_KEY_URL=https://download.docker.com/linux/raspbian/gpg
 get_gpg "${DOCKERREPO_FPR}" "${DOCKERREPO_KEY_URL}"
 
-echo "deb [arch=armhf] https://download.docker.com/linux/raspbian buster $DOCKER_CE_CHANNEL" > /etc/apt/sources.list.d/docker.list
+echo "deb [arch=arm64] https://download.docker.com/linux/debian/ bullseye $DOCKER_CE_CHANNEL" > /etc/apt/sources.list.d/docker.list
 
 c_rehash
 
-RPI_ORG_FPR=CF8A1AF502A2AA2D763BAE7E82B129927FA3303E RPI_ORG_KEY_URL=http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+RPI_ORG_FPR=A0DA38D0D76E8B5D638872819165938D90FDDD2E RPI_ORG_KEY_URL=http://raspbian.raspberrypi.org/raspbian.public.key
 get_gpg "${RPI_ORG_FPR}" "${RPI_ORG_KEY_URL}"
 
-echo 'deb http://archive.raspberrypi.org/debian/ buster main' | tee /etc/apt/sources.list.d/raspberrypi.list
+echo 'deb http://raspbian.raspberrypi.org/raspbian/ bullseye main' | tee /etc/apt/sources.list.d/raspberrypi.list
+echo 'deb http://ftp.debian.org/debian bullseye main' | tee /etc/apt/sources.list.d/debian.list
 
 # reload package sources
 apt-get update
@@ -233,18 +234,15 @@ apt-get install -y \
 systemctl mask systemd-resolved
 
 # install docker-machine
-curl -sSL -o /usr/local/bin/docker-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-armhf"
+curl -sSL -o /usr/local/bin/docker-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-aarch64"
 chmod +x /usr/local/bin/docker-machine
 
 # install bash completion for Docker Machine
 curl -sSL "https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine.bash" -o /etc/bash_completion.d/docker-machine
 
 # install docker-compose
-apt-get install -y \
-  --no-install-recommends \
-  python3 python3-pip python3-setuptools
-update-alternatives --install /usr/bin/python python /usr/bin/python3.7 2
-pip3 install "docker-compose==${DOCKER_COMPOSE_VERSION}"
+curl -sSL -o /usr/local/bin/docker-compose "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-aarch64"
+chmod +x /usr/local/bin/docker-compose
 
 # install bash completion for Docker Compose
 curl -sSL "https://raw.githubusercontent.com/docker/compose/${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose" -o /etc/bash_completion.d/docker-compose

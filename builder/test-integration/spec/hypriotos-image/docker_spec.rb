@@ -15,7 +15,7 @@ end
 describe command('dpkg -l docker-ce') do
   its(:stdout) { should match /ii  docker-ce/ }
   its(:stdout) { should match /5:19.03.12~3-0~raspbian/ }
-  its(:stdout) { should match /armhf/ }
+  its(:stdout) { should match /arm64/ }
   its(:exit_status) { should eq 0 }
 end
 

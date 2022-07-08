@@ -18,7 +18,7 @@ BUILD_RESULT_PATH="/workspace"
 # place to build our sd-image
 BUILD_PATH="/build"
 
-ROOTFS_TAR="rootfs-armhf-raspbian-${HYPRIOT_OS_VERSION}.tar.gz"
+ROOTFS_TAR="rootfs-arm64-raspbian-${HYPRIOT_OS_VERSION}.tar.gz"
 ROOTFS_TAR_PATH="${BUILD_RESULT_PATH}/${ROOTFS_TAR}"
 
 # Show CIRCLE_TAG in Circle builds
@@ -61,7 +61,7 @@ tar xf "${ROOTFS_TAR_PATH}" -C "${BUILD_PATH}"
 # register qemu-arm with binfmt
 # to ensure that binaries we use in the chroot
 # are executed via qemu-arm
-update-binfmts --enable qemu-arm
+update-binfmts --enable qemu-aarch64
 
 # set up mount points for the pseudo filesystems
 mkdir -p ${BUILD_PATH}/{proc,sys,dev/pts}
